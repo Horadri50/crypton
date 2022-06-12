@@ -1,5 +1,10 @@
 package src;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -16,5 +21,32 @@ public class CodeCaesar {
 
     public static String scanner() {
         return new Scanner(System.in).nextLine();
+    }
+
+    private static void encryptCesar(Path pathFile, int offset) throws IOException {
+        Path resultFile = createFile(pathFile);
+        try (FileReader fr = new FileReader(String.valueOf(pathFile));
+             FileWriter fw = new FileWriter(String.valueOf(resultFile))) {
+            while (fr.ready()) {
+                int charRead = fr.read();
+                if (alphabet.contains((char) charRead)) {
+                    fw.write(alphabet.get((alphabet.indexOf((char) charRead) + offset) % alphabet.size()));
+                } else {
+                    fw.write(charRead);
+                }
+            }
+        }
+    }
+
+    private static Path createFile(Path fileName) throws IOException {
+        String crypt = "encrypt_";
+        if (Thread.currentThread().getStackTrace()[2].getMethodName().equals("decryptCesar")) {
+            crypt = "decrypt_";
+        }
+        Path resultFile = Path.of(fileName.getParent() + "\\" + crypt + fileName.getFileName());
+        if (!Files.isRegularFile(resultFile)) {
+            Files.createFile(resultFile);
+        }
+        return resultFile;
     }
 }
