@@ -1,5 +1,6 @@
 package src;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +15,43 @@ public class CodeCaesar {
             '3', '4', '5', '6', '7', '8', '9', '!', '?', '-', ';',':', ',', '.', ' ', '"');
 
     public static void main(String[] args) {
-
+        boolean flag = false;
+        while (!flag) {
+            try {
+                System.out.println("[1 шифрование] [2 расшифровка] [3 брут-форс] [exit если передумали], пожалуйста, выберите один вариант");
+                String text = scanner();
+                switch (text) {
+                    case "1" -> {
+                        System.out.print("Введите полный путь к файлу и шаг: ");
+                        String[] file = scanner().split(" ");
+                        encryptCesar(Path.of(file[0]), Integer.parseInt(file[1]));
+                        System.out.println("Файл успешно зашифрован");
+                    }
+                    case "2" -> {
+                        System.out.print("Введите полный путь к файлу и шаг: ");
+                        String[] file = scanner().split(" ");
+                        decryptCesar(Path.of(file[0]), Integer.parseInt(file[1]));
+                        System.out.println("Файл успешно расшифрован");
+                    }
+                    case "3" -> {
+                        System.out.print("Введите полный путь к файлу: ");
+                        text = scanner();
+                        bruteForce(Path.of(text));
+                    }
+                    case "exit" -> {
+                        System.out.print("Програма завершена");
+                        flag = true;
+                    }
+                    default -> System.out.println("Неправильный ввод");
+                }
+            } catch (IOException | IllegalArgumentException e) {
+                if (e instanceof FileNotFoundException) {
+                    System.out.println("Не удается найти указанный файл, попробуй еще раз");
+                } else if (e instanceof NumberFormatException) {
+                    System.out.println("Ключ должен быть целое число!");
+                }
+            }
+        }
     }
 
     public static String scanner() {
