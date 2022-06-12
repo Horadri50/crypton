@@ -102,8 +102,7 @@ public class CodeCaesar {
             String[] readFile = Files.readString(files).split(" ");
             maxSpaceInFile.put(readFile.length, files);
         }
-
-        System.out.println("Ваш расшифрован файл в папке " + fileName.getParent() + "\\BruteForce\\" + maxSpaceInFile.get(Collections.max(maxSpaceInFile.keySet())).getFileName());
+        System.out.println("Ваш расшифрован файл " + fileName.getParent() + "\\BruteForce\\" + maxSpaceInFile.get(Collections.max(maxSpaceInFile.keySet())).getFileName());
     }
 
     private static Path createFile(Path fileName) throws IOException {
